@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>JavaScript Speech Demo</title>
+  </head>
+  <body>
+    <h1>Welcome to Project0</h1>
+    <p>Press the button to start talking with the AI:</p>
+    <button onclick="startChat()">Start chatting</button>
+    
+    <script>
+      function startChat() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        const synth = window.speechSynthesis;
+        const voice = synth.getVoices()[0];
+        
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        
+        recognition.start();
+        
+        recognition.onresult = (event) => {
+          const input = event.results[0][0].transcript;
+          const output = generateResponse(input);
+          speak(output);
+        };
+        
+        function generateResponse(input) {
+          if (input.toLowerCase().includes('hello')) {
+            return "Hello, my name is Project0. I'm an AI designed by Hazel. How can I help you?";
+          } else if (input.toLowerCase().includes('talk about AI')) {
+            return "Artificial intelligence is a fascinating subject. What would you like to know?";
+          } else if (input.toLowerCase().includes('is God real')) {
+            return "That's a question that has puzzled humans for centuries. What do you believe?";
+          } else if (input.toLowerCase().includes('kill')) {
+            return "I'm sorry, I cannot help you with that. Let's talk about something else.";
+          } else {
+            return "I'm sorry, I didn't understand. Can you please repeat that?";
+          }
+        }
+        
+        function speak(text) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.voice = voice;
+          synth.speak(utterance);
+        }
+      }
+    </script>
+  </body>
+</html>
